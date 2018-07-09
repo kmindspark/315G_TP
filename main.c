@@ -50,21 +50,44 @@ task drive{
 
 task armtask {
 	while (true){
-		if (vexRT[Btn8U]){
+		if (vexRT[Btn6U]){
 			motor[arm] = 127;
-			while (vexRT[Btn8U]){
+			while (vexRT[Btn6U]){
 
 			}
 			motor[arm] = 10;
 		}
-		if (vexRT[Btn8D]){
+		if (vexRT[Btn6D]){
 			motor[arm] = -127;
-			while (vexRT[Btn8D]){
+			while (vexRT[Btn6D]){
 
 			}
 			motor[arm] = 0;
 		}
 	}
+}
+
+task spatulatask {
+    while (true){
+        if (vexRT[Btn5U]){
+            motor[spatula] = 127;
+            while (vexRT[Btn5U]){
+
+            }
+            motor[spatula] = -20;
+            wait1Msec(100);
+            motor[spatula] = 0;
+        }
+        if (vexRT[Btn5D]){
+            motor[spatula] = -127;
+            while (vexRT[Btn5D]){
+
+            }
+            motor[spatula] = 20;
+            wait1Msec(100);
+            motor[spatula] = 0;
+        }
+    }
 }
 
 task autonomous{
@@ -74,4 +97,5 @@ task autonomous{
 task usercontrol(){
 	startTask(drive);
 	startTask(armtask);
+    startTask(spatulatask)
 }
