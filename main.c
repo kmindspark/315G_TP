@@ -24,40 +24,54 @@
 #include "Vex_Competition_Includes.c"   //Main competition background code...do not modify!
 #define vexCompetitionState (nVexRCReceiveState & (vrDisabled | vrAutonomousMode))
 
-task drive{
-    int forward;
-    int turn;
+void pre_auton(){
 
-    while (true){
-        forward = computeActualValue(vexRT[Ch3]);
-	    turn = computeActualValue(vexRT[Ch1]);
-        motor[dl1] = forward + turn;
-        motor[dl2] = forward + turn;
-		motor[dr1] = forward - turn;
-        motor[dr2] = forward - turn;
-    }
 }
 
-task arm{
-    while (true){
-        if (vexRT[Btn8U]){
-            motor[arm] = 127;
-            while (vexRT[Btn8U]){
+int computeActualValue(int val){
+	if (abs(val) > 30){
+		return val;
+	}
+	return 0;
+}
 
-            }
-            motor[arm] = 10;
-        }
-        if (vexRT[Btn8D]){
-            motor[arm] = -127;
-            while (vexRT[Btn8D]){
+task drive{
+	int forward;
+	int turn;
+	while (true){
+		forward = computeActualValue(vexRT[Ch3]);
+		turn = computeActualValue(vexRT[Ch1]);
+		motor[dl1] = forward + turn;
+		motor[dl2] = forward + turn;
+		motor[dr1] = forward - turn;
+		motor[dr2] = forward - turn;
+	}
+}
 
-            }
-            motor[arm] = 0;
-        }
-    }
+task armtask {
+	while (true){
+		if (vexRT[Btn8U]){
+			motor[arm] = 127;
+			while (vexRT[Btn8U]){
+
+			}
+			motor[arm] = 10;
+		}
+		if (vexRT[Btn8D]){
+			motor[arm] = -127;
+			while (vexRT[Btn8D]){
+
+			}
+			motor[arm] = 0;
+		}
+	}
+}
+
+task autonomous{
+
 }
 
 task usercontrol(){
-    startTask(drive);
-    startTask(arm);
+	startTask(drive);
+	startTask(armtask);
 }
